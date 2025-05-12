@@ -32,8 +32,17 @@ namespace RetrieveTheFolder
         {
             InitializeComponent();
             dgvData.AutoGenerateColumns = false;
-
+            this.dgvData.Columns["colFolderPath"].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            this.dgvData.Columns["colFolderName"].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
             this.Icon = RetrieveTheFolder.Properties.Resources.favicon;
+        }
+        private void FormRetrieve_Load(object sender, EventArgs e)
+        {
+            this.cmbUnitFilter.SelectedIndex= 3;
+        }
+        private void FormRetrieve_Shown(object sender, EventArgs e)
+        {
+            this.progressBar1.Visible = false;
         }
 
         private void btnRetrieve_Click(object sender, EventArgs e)
@@ -60,6 +69,7 @@ namespace RetrieveTheFolder
                     {
                         Task task = Task.Factory.StartNew(() =>
                         {
+                            data.Clear();
                             EnumerateFiles(this.txbFolder.Text);
                         });
                         task.Wait();
@@ -96,25 +106,36 @@ namespace RetrieveTheFolder
                 thread.IsBackground = true;
                 thread.Start();
             }
+            gbxRetrieveResult.Visible=true;
+            btnFilter.Visible=true;
         }
 
         private void LoadDgv()
         {
+            var filterData = new List<RowInfo>(data);//浅拷贝：只拷贝了List，里面的对象内容还是引用赋值
+            //小于指定大小的文件不显示
             if (nudValue.Value > 0)
             {
-                var minValue = nudValue.Value * 1024 * 1024 * 1024;
-                data = data.Where(w => w.Size >= ((long)minValue)).ToList();
+                var minValue = (long)nudValue.Value * Math.Pow(1024, (cmbUnitFilter.SelectedIndex));
+                filterData = filterData.Where(w => w.Size > ((long)minValue)).ToList();
+            }
+            if (ckbOnlyBaseFolder.Checked)
+            {
+                int baseLevel = 0;
+                baseLevel = filterData.Min(w => w.Level);
+                filterData = filterData.Where(w => w.Level == baseLevel).ToList();
+                this.dgvData.Columns["colFolderLevel"].Visible = false;
             }
 
             if (ckbGroupFolder.Checked)
             {
-                var firstFolder = data.Where(s => s.DirectoryPath.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries).Length == 2).Select(w => w.DirectoryPath).Distinct().ToList();
+                var firstFolder = filterData.Where(s => s.DirectoryPath.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries).Length == 2).Select(w => w.DirectoryPath).Distinct().ToList();
                 var dataDic = new Dictionary<string, List<RowInfo>>();
                 var firstFolderDic = new Dictionary<string, RowInfo>();
                 firstFolder.ForEach(key =>
                 {
-                    firstFolderDic.Add(key, data.FirstOrDefault(f => f.DirectoryPath.Equals(key)));
-                    dataDic.Add(key, data.Where(w => w.DirectoryPath.StartsWith(key)).OrderByDescending(o => o.Size).ToList());
+                    firstFolderDic.Add(key, filterData.FirstOrDefault(f => f.DirectoryPath.Equals(key)));
+                    dataDic.Add(key, filterData.Where(w => w.DirectoryPath.StartsWith(key)).OrderByDescending(o => o.Size).ToList());
                 });
                 var temp = new List<RowInfo>();
                 firstFolderDic.OrderByDescending(o => o.Value.Size).Select(s => s.Key).ToList().ForEach(f =>
@@ -124,10 +145,31 @@ namespace RetrieveTheFolder
                 result = new BindingList<RowInfo>(temp);
             }
             else {
-                result = new BindingList<RowInfo>(data.OrderByDescending(o=>o.Size).ThenBy(t=>t.DirectoryPath).ToList());
+                result = new BindingList<RowInfo>(filterData.OrderByDescending(o=>o.Size).ThenBy(t=>t.DirectoryPath).ToList());
             }
-            dgvData.DataSource = null;
+            for (int i = 0; i < result.Count; i++)
+            {
+                result[i].No = i + 1;
+            }
+            result = ConvertSizeDisplay(result);
             dgvData.DataSource = result;
+        }
+
+        private BindingList<RowInfo> ConvertSizeDisplay(BindingList<RowInfo> result)
+        {
+            foreach (var item in result)
+            {
+                string[] unit = {"B", "KB", "MB", "GB", "TB" };
+                double realSize = item.Size;
+                int unitIndex=0;
+                while (realSize >= 1024 && unitIndex < unit.Length - 1)
+                {
+                    realSize /= 1024.0;
+                    unitIndex++;
+                }
+                item.SizeDisplay = realSize.ToString("0.0") + unit[unitIndex];
+            }
+            return result;
         }
 
         private void SetButtonEnable()
@@ -191,14 +233,6 @@ namespace RetrieveTheFolder
             return 0;
         }
 
-        private void FormRetrieve_Shown(object sender, EventArgs e)
-        {
-            this.progressBar1.Visible = false;
-        }
-
-        private void dgvData_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
 
         private void dgvData_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -230,25 +264,33 @@ namespace RetrieveTheFolder
 
         private void btnFilter_Click(object sender, EventArgs e)
         {
+            if (data==null||data.Count==0)
+            {
+                MessageBox.Show("检索内容为空，请确保输入路径下面有文件夹");
+                return;
+            }
             LoadDgv();
         }
     }
 
     public class RowInfo
     {
-        private const double MSize = 1024.0 * 1024.0;
-        private const double GSize = 1024.0 * 1024.0 * 1024.0;
+        public int No {  get; set; }
         public string DirectoryName { get; set; }
-        // 在计算时就保留两位小数
-        public string SizeM { get { return (this.Size / MSize).ToString("0.00M"); } }
         /// <summary>
         /// 原始值
         /// </summary>
         public double Size { get; set; }
+        private const double MSize = 1024.0 * 1024.0;
+        private const double GSize = 1024.0 * 1024.0 * 1024.0;
+        // 在计算时就保留两位小数
+        public string SizeM { get { return (this.Size / MSize).ToString("0.0M"); } }
+        
 
-        public string SizeG { get { return (this.Size / GSize).ToString("0.00G"); } }
+        public string SizeG { get { return (this.Size / GSize).ToString("0.0G"); } }
         public string DirectoryPath { get; set; }
 
         public int Level { get; set; }
+        public string SizeDisplay { get; set; }
     }
 }
