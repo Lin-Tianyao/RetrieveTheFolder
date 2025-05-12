@@ -38,7 +38,8 @@ namespace RetrieveTheFolder
         }
         private void FormRetrieve_Load(object sender, EventArgs e)
         {
-            this.cmbUnitFilter.SelectedIndex= 3;
+            this.cmbUnitFilterMin.SelectedIndex= 3;
+            this.cmbUnitFilterMax.SelectedIndex= 3;
         }
         private void FormRetrieve_Shown(object sender, EventArgs e)
         {
@@ -114,10 +115,16 @@ namespace RetrieveTheFolder
         {
             var filterData = new List<RowInfo>(data);//浅拷贝：只拷贝了List，里面的对象内容还是引用赋值
             //小于指定大小的文件不显示
-            if (nudValue.Value > 0)
+            if (nudLimitMinValue.Value > 0|| nudLimitMaxValue.Value > 0)
             {
-                var minValue = (long)nudValue.Value * Math.Pow(1024, (cmbUnitFilter.SelectedIndex));
-                filterData = filterData.Where(w => w.Size > ((long)minValue)).ToList();
+                var minValue = (long)nudLimitMinValue.Value * Math.Pow(1024, (cmbUnitFilterMin.SelectedIndex));
+                var maxValue = (long)nudLimitMaxValue.Value * Math.Pow(1024, (cmbUnitFilterMax.SelectedIndex));
+                if (maxValue<minValue)
+                {
+                    MessageBox.Show("文件大小限制范围出错，请修改后重试");
+                    return;
+                }
+                filterData = filterData.Where(w => w.Size >= ((long)minValue)).Where(w=>w.Size<= ((long)maxValue)).ToList();
             }
             if (ckbOnlyBaseFolder.Checked)
             {

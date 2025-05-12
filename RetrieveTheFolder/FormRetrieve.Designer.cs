@@ -29,8 +29,8 @@ namespace RetrieveTheFolder
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.txbFolder = new System.Windows.Forms.TextBox();
             this.btnRetrieve = new System.Windows.Forms.Button();
             this.gbxRetrieveResult = new System.Windows.Forms.GroupBox();
@@ -44,16 +44,20 @@ namespace RetrieveTheFolder
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.btnSelect = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.nudValue = new System.Windows.Forms.NumericUpDown();
+            this.nudLimitMinValue = new System.Windows.Forms.NumericUpDown();
             this.ckbGroupFolder = new System.Windows.Forms.CheckBox();
             this.btnFilter = new System.Windows.Forms.Button();
             this.ckbOnlyBaseFolder = new System.Windows.Forms.CheckBox();
             this.gbxFilter = new System.Windows.Forms.GroupBox();
-            this.cmbUnitFilter = new System.Windows.Forms.ComboBox();
+            this.cmbUnitFilterMax = new System.Windows.Forms.ComboBox();
+            this.cmbUnitFilterMin = new System.Windows.Forms.ComboBox();
+            this.nudLimitMaxValue = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.gbxRetrieveResult.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitMinValue)).BeginInit();
             this.gbxFilter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitMaxValue)).BeginInit();
             this.SuspendLayout();
             // 
             // txbFolder
@@ -102,14 +106,14 @@ namespace RetrieveTheFolder
             // 
             // dgvData
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.RowNo,
@@ -130,8 +134,8 @@ namespace RetrieveTheFolder
             // RowNo
             // 
             this.RowNo.DataPropertyName = "No";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.RowNo.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.RowNo.DefaultCellStyle = dataGridViewCellStyle14;
             this.RowNo.HeaderText = "序号";
             this.RowNo.Name = "RowNo";
             this.RowNo.Width = 60;
@@ -185,20 +189,20 @@ namespace RetrieveTheFolder
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 5;
-            this.label2.Text = "文件大于：";
+            this.label2.Text = "大小介于：";
             // 
-            // nudValue
+            // nudLimitMinValue
             // 
-            this.nudValue.Location = new System.Drawing.Point(81, 19);
-            this.nudValue.Maximum = new decimal(new int[] {
+            this.nudLimitMinValue.Location = new System.Drawing.Point(94, 19);
+            this.nudLimitMinValue.Maximum = new decimal(new int[] {
             1024,
             0,
             0,
             0});
-            this.nudValue.Name = "nudValue";
-            this.nudValue.Size = new System.Drawing.Size(62, 21);
-            this.nudValue.TabIndex = 6;
-            this.nudValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudLimitMinValue.Name = "nudLimitMinValue";
+            this.nudLimitMinValue.Size = new System.Drawing.Size(45, 21);
+            this.nudLimitMinValue.TabIndex = 6;
+            this.nudLimitMinValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // ckbGroupFolder
             // 
@@ -213,7 +217,7 @@ namespace RetrieveTheFolder
             // btnFilter
             // 
             this.btnFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFilter.Location = new System.Drawing.Point(249, 73);
+            this.btnFilter.Location = new System.Drawing.Point(315, 105);
             this.btnFilter.Name = "btnFilter";
             this.btnFilter.Size = new System.Drawing.Size(75, 23);
             this.btnFilter.TabIndex = 10;
@@ -236,31 +240,75 @@ namespace RetrieveTheFolder
             // 
             // gbxFilter
             // 
-            this.gbxFilter.Controls.Add(this.cmbUnitFilter);
+            this.gbxFilter.Controls.Add(this.cmbUnitFilterMax);
+            this.gbxFilter.Controls.Add(this.cmbUnitFilterMin);
             this.gbxFilter.Controls.Add(this.ckbOnlyBaseFolder);
             this.gbxFilter.Controls.Add(this.ckbGroupFolder);
-            this.gbxFilter.Controls.Add(this.nudValue);
+            this.gbxFilter.Controls.Add(this.nudLimitMaxValue);
+            this.gbxFilter.Controls.Add(this.nudLimitMinValue);
+            this.gbxFilter.Controls.Add(this.label1);
             this.gbxFilter.Controls.Add(this.label2);
             this.gbxFilter.Location = new System.Drawing.Point(6, 33);
             this.gbxFilter.Name = "gbxFilter";
-            this.gbxFilter.Size = new System.Drawing.Size(222, 95);
+            this.gbxFilter.Size = new System.Drawing.Size(303, 95);
             this.gbxFilter.TabIndex = 11;
             this.gbxFilter.TabStop = false;
             this.gbxFilter.Text = "过滤条件";
             // 
-            // cmbUnitFilter
+            // cmbUnitFilterMax
             // 
-            this.cmbUnitFilter.FormattingEnabled = true;
-            this.cmbUnitFilter.Items.AddRange(new object[] {
+            this.cmbUnitFilterMax.FormattingEnabled = true;
+            this.cmbUnitFilterMax.Items.AddRange(new object[] {
             "B",
             "KB",
             "MB",
             "GB",
             "TB"});
-            this.cmbUnitFilter.Location = new System.Drawing.Point(146, 19);
-            this.cmbUnitFilter.Name = "cmbUnitFilter";
-            this.cmbUnitFilter.Size = new System.Drawing.Size(38, 20);
-            this.cmbUnitFilter.TabIndex = 10;
+            this.cmbUnitFilterMax.Location = new System.Drawing.Point(248, 19);
+            this.cmbUnitFilterMax.Name = "cmbUnitFilterMax";
+            this.cmbUnitFilterMax.Size = new System.Drawing.Size(35, 20);
+            this.cmbUnitFilterMax.TabIndex = 10;
+            // 
+            // cmbUnitFilterMin
+            // 
+            this.cmbUnitFilterMin.FormattingEnabled = true;
+            this.cmbUnitFilterMin.Items.AddRange(new object[] {
+            "B",
+            "KB",
+            "MB",
+            "GB",
+            "TB"});
+            this.cmbUnitFilterMin.Location = new System.Drawing.Point(138, 19);
+            this.cmbUnitFilterMin.Name = "cmbUnitFilterMin";
+            this.cmbUnitFilterMin.Size = new System.Drawing.Size(35, 20);
+            this.cmbUnitFilterMin.TabIndex = 10;
+            // 
+            // nudLimitMaxValue
+            // 
+            this.nudLimitMaxValue.Location = new System.Drawing.Point(203, 19);
+            this.nudLimitMaxValue.Maximum = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            this.nudLimitMaxValue.Name = "nudLimitMaxValue";
+            this.nudLimitMaxValue.Size = new System.Drawing.Size(45, 21);
+            this.nudLimitMaxValue.TabIndex = 6;
+            this.nudLimitMaxValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudLimitMaxValue.Value = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(180, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(17, 12);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "～";
             // 
             // FormRetrieve
             // 
@@ -279,9 +327,10 @@ namespace RetrieveTheFolder
             this.Shown += new System.EventHandler(this.FormRetrieve_Shown);
             this.gbxRetrieveResult.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitMinValue)).EndInit();
             this.gbxFilter.ResumeLayout(false);
             this.gbxFilter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitMaxValue)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,7 +345,7 @@ namespace RetrieveTheFolder
         private System.Windows.Forms.Button btnSelect;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown nudValue;
+        private System.Windows.Forms.NumericUpDown nudLimitMinValue;
         private System.Windows.Forms.CheckBox ckbGroupFolder;
         private System.Windows.Forms.Button btnFilter;
         private System.Windows.Forms.CheckBox ckbOnlyBaseFolder;
@@ -306,7 +355,10 @@ namespace RetrieveTheFolder
         private System.Windows.Forms.DataGridViewTextBoxColumn colFolderLevel;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFolderPath;
         private System.Windows.Forms.GroupBox gbxFilter;
-        private System.Windows.Forms.ComboBox cmbUnitFilter;
+        private System.Windows.Forms.ComboBox cmbUnitFilterMin;
+        private System.Windows.Forms.NumericUpDown nudLimitMaxValue;
+        private System.Windows.Forms.ComboBox cmbUnitFilterMax;
+        private System.Windows.Forms.Label label1;
     }
 }
 
