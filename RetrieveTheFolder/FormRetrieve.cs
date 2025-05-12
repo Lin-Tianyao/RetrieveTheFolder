@@ -113,6 +113,7 @@ namespace RetrieveTheFolder
 
         private void LoadDgv()
         {
+            if (!(data.Count > 0)) return;
             var filterData = new List<RowInfo>(data);//浅拷贝：只拷贝了List，里面的对象内容还是引用赋值
             //小于指定大小的文件不显示
             if (nudLimitMinValue.Value > 0|| nudLimitMaxValue.Value > 0)
